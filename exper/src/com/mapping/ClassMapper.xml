@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mapping.ClassMapper" >
+  <resultMap id="BaseResultMap" type="com.pojo.ClassInfo" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="className" property="className" jdbcType="VARCHAR" />
+    <result column="classDate" property="classDate" jdbcType="VARCHAR" />
+    <result column="teacherId" property="teacherId" jdbcType="INTEGER" />
+    <result column="allowed" property="allowed" jdbcType="INTEGER" />
+    <result column="rest" property="rest" jdbcType="INTEGER" />
+    <result column="duration" property="duration" jdbcType="VARCHAR" />
+    <result column="selectDate" property="selectDate" jdbcType="VARCHAR" />
+    <result column="experName" property="experName" jdbcType="VARCHAR" />
+    <result column="experInfo" property="experInfo" jdbcType="VARCHAR" />
+    <result column="experData" property="experData" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, className, classDate, teacherId, allowed, rest, duration, selectDate ,experName, experInfo,
+    experData ,remark
+    
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_class
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByWhere" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_class
+    where 1=1
+       <if test="teacherId != null and teacherId != ''" >
+        and teacherId =  #{teacherId}
+      </if>
+      <if test="className != null and className != ''" >
+        and className like #{className}
+      </if>
+      <if test="experName != null and experName != ''" >
+        and experName like #{experName}
+      </if> 
+     
+  </select>
+  
+    <select id="selectCountByWhere" resultType="java.lang.Long" parameterType="java.util.HashMap" >
+    select 
+    	count(*) 
+    from  t_class
+    where 1=1
+       <if test="teacherId != null and teacherId != ''" >
+        and teacherId =  #{teacherId}
+      </if>
+      <if test="className != null and className != ''" >
+        and className like #{className}
+      </if>
+      <if test="experName != null and experName != ''" >
+        and experName like #{experName}
+      </if> 
+  </select> 
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_class
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pojo.ClassInfo" >
+    insert into t_class  (className, classDate, teacherId, allowed, rest, duration, selectDate, experName, experInfo,
+    experData ,remark)
+    values (#{className,jdbcType=VARCHAR}, #{classDate,jdbcType=VARCHAR}, 
+       #{teacherId,jdbcType=INTEGER}, #{allowed,jdbcType=INTEGER}, 
+      #{rest,jdbcType=INTEGER}, #{duration,jdbcType=VARCHAR}, #{selectDate,jdbcType=VARCHAR}, #{experName,jdbcType=VARCHAR}, 
+      #{experInfo,jdbcType=VARCHAR}, #{experData,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.pojo.ClassInfo" >
+    update t_class
+    set 
+      className = #{className,jdbcType=VARCHAR},
+      classDate = #{classDate,jdbcType=VARCHAR},
+      teacherId = #{teacherId,jdbcType=INTEGER},
+      allowed = #{allowed,jdbcType=INTEGER},
+      rest = #{rest,jdbcType=INTEGER},
+      duration = #{duration,jdbcType=VARCHAR},
+      selectDate=#{selectDate,jdbcType=VARCHAR},
+      experName = #{experName,jdbcType=VARCHAR},
+      experInfo = #{experInfo,jdbcType=VARCHAR},
+      experData = #{experData,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateRest" parameterType="java.lang.Integer" >
+    update t_class
+    set 
+      rest = rest -1 
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <update id="cancelClass" parameterType="java.lang.Integer" >
+    update t_class
+    set 
+      rest = rest  + 1 
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

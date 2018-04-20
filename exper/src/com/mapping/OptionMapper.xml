@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mapping.OptionMapper" >
+  <resultMap id="BaseResultMap" type="com.pojo.OptionInfo" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="states" property="states" jdbcType="VARCHAR" />
+    <result column="judge" property="judge" jdbcType="VARCHAR" />
+    <result column="userId" property="userId" jdbcType="INTEGER" />
+    <result column="classId" property="classId" jdbcType="INTEGER"/>
+    <result column="situation" property="situation" jdbcType="VARCHAR" />
+    <result column="imageName" property="imageName" jdbcType="VARCHAR" />
+    <result column="imageUrl" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, states, judge, userId, situation, imageName ,imageUrl, remark , classId
+    
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_optional
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByWhere" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_optional
+    where 1=1
+       <if test="userId != null and userId != ''" >
+        and userId =  #{userId}
+      </if>
+      <if test="states != null and states != ''" >
+        and states like #{states}
+      </if>
+     
+  </select>
+  
+    <select id="selectCountByWhere" resultType="java.lang.Long" parameterType="java.util.HashMap" >
+    select 
+    	count(*) 
+    from  t_optional
+    where 1=1
+       <if test="userId != null and userId != ''" >
+        and userId =  #{userId}
+      </if>
+      <if test="states != null and states != ''" >
+        and states like #{states}
+      </if>
+  </select> 
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_optional
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pojo.OptionInfo" >
+    insert into t_optional  (states, judge,  userId, situation, imageUrl, remark,classId)
+    values (#{states,jdbcType=VARCHAR}, #{judge,jdbcType=VARCHAR}, 
+        #{userId,jdbcType=INTEGER}, #{situation,jdbcType=VARCHAR},
+         #{imageUrl,jdbcType=VARCHAR},  #{remark,jdbcType=VARCHAR},#{classId,jdbcType=INTEGER} )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.pojo.OptionInfo" >
+    update t_optional
+    set 
+      states = #{states,jdbcType=VARCHAR},
+      judge = #{judge,jdbcType=VARCHAR},
+      userId = #{userId,jdbcType=INTEGER},
+      situation = #{situation,jdbcType=VARCHAR},
+      imageName=#{imageName,jdbcType=VARCHAR},
+      imageUrl = #{imageUrl,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

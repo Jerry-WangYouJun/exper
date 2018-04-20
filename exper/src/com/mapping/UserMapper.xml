@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mapping.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.pojo.User" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="position" property="position" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="telphone" property="telphone" jdbcType="VARCHAR" />
+    <result column="userName" property="username" jdbcType="VARCHAR" />
+    <result column="role" property="role" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, email, position, pwd, remark, sex, telphone, userName, role
+    
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_user
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByUserNoAndPwd" resultMap="BaseResultMap" parameterType="com.pojo.User" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_user
+    where userName = #{username}
+    and pwd = #{pwd}
+  </select>
+  
+  <select id="selectUserByWhere" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from  t_user
+    where 1=1
+       <if test="role != null and role != ''" >
+        and role like #{role}
+      </if>
+      <if test="username != null and username != ''" >
+        and userName like #{username}
+      </if>
+      <if test="position != null and position != ''" >
+        and position like #{position}
+      </if> 
+     
+  </select>
+  
+    <select id="selectUserCountByWhere" resultType="java.lang.Long" parameterType="java.util.HashMap" >
+    select 
+    	count(*) 
+    from  t_user
+    where 1=1
+       <if test="role != null and role != ''" >
+        and role like #{role}
+      </if>
+      <if test="username != null and username != ''" >
+        and userName like #{username}
+      </if>
+      <if test="position != null and position != ''" >
+        and position like #{position}
+      </if> 
+  </select> 
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from  t_user
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pojo.User" >
+    insert into t_user  (  email, 
+      position, pwd, 
+      remark, sex, telphone, 
+      userName, role)
+    values ( #{email,jdbcType=VARCHAR}, 
+       #{position,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{telphone,jdbcType=VARCHAR}, 
+      #{username,jdbcType=VARCHAR}, #{role,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.pojo.User" >
+    insert into  t_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="position != null" >
+        position,
+      </if>
+      <if test="pwd != null" >
+        pwd,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="telphone != null" >
+        telphone,
+      </if>
+      <if test="username != null" >
+        userName,
+      </if>
+      <if test="role != null" >
+        role,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null" >
+        #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="telphone != null" >
+        #{telphone,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null" >
+        #{role,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pojo.User" >
+    update  t_user
+    <set >
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        position = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null" >
+        pwd = #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="telphone != null" >
+        telphone = #{telphone,jdbcType=VARCHAR},
+      </if>
+      <if test="username != null" >
+        userName = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="role != null" >
+        role = #{role,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pojo.User" >
+    update t_user
+    set 
+      email = #{email,jdbcType=VARCHAR},
+      position = #{position,jdbcType=VARCHAR},
+      pwd = #{pwd,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      telphone = #{telphone,jdbcType=VARCHAR},
+      userName = #{username,jdbcType=VARCHAR},
+      role = #{role,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
