@@ -164,9 +164,9 @@ public class OptionController {
 		long rest  = DateUtils.getBetweenDays(now, DateUtils.formatDate("yyyy-MM-dd", classInfo.getClassDate()));
 		Calendar ca = Calendar.getInstance();
 		int hours = ca.get(Calendar.HOUR_OF_DAY);
-		if(rest <= 1 && hours > 16 && hours != 0) {
+		if((rest <= 1 && hours > 16 && hours != 0)|| rest == 0) {
 			map.put("success", false);
-			map.put("msg", "晚于开课前16点，不能取消！");
+			map.put("msg", "即将开始上课，不能取消！");
 			return map;
 		}
 		info.setStates("0");

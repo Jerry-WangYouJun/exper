@@ -64,10 +64,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								return "";
 							}
 						}},
-					{field:'classInfo',title:'实验名',width:100,align:'center',
+					{field:'experName',title:'实验名',width:100,align:'center',
 						formatter : function(value, row, index) {
 							return row.classInfo.experName;
 						}},
+					{field:'experTime',title:'实验时间',width:100,align:'center',
+							formatter : function(value, row, index) {
+								return row.classInfo.classDate;
+							}},
 					{field:'states',title:'实验状态',width:100,align:'center',
 						formatter : function(value, row, index) {
 							if (value == '1') {
@@ -89,7 +93,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							return "";
 						}
 					}},				
-					{field:'imageUrl',title:'持续时间',width:100,align:'center'},
 					{field:'remark',title:'备注',width:100,align:'center'}
 				]],				
 			});
@@ -127,6 +130,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     			$('#option_dlg').dialog('setTitle','提交实验结果');
     			$('#option_form').form('load', row);
 				$("#option_save").unbind('click').click(function(){
+					var upfile = $("#upfile").val();
+					if(upfile ==''){
+						  alert("请选择要上传的实验图片");
+						  return false;
+					}
 					$("#option_form").ajaxSubmit({
 	  					url : "${pageContext.request.contextPath}/option/option_situation",
 	  					type : 'post',
@@ -197,7 +205,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	            </div>
 	            <div class="form-group col-md-12">
 	            	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">实验照片：</label>
-	                <input type="file" name="upfile" class=" form-control" style="display: inline-block;width: 70%">
+	                <input type="file" id="upfile" name="upfile" class=" form-control" style="display: inline-block;width: 70%">
 	            </div>
 			 </c:when>
 			 <c:otherwise>

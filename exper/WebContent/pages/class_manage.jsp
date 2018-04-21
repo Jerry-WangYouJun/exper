@@ -57,13 +57,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				singleSelect: true,
 				columns:[[
 					{field:'id', hidden:'true',editor:'textbox' },
-					{field:'className',title:'课程名称',width:100,align:'center'},
-					{field:'classDate',title:'开课时间',width:100,align:'center'},
-					{field:'teacherName',title:'教师',width:150,align:'center',
+					{field:'className',title:'课程名称',width:100,align:'center',
 						formatter : function(value, row, index) {
-							return row.user.username;
+							return row.pclassInfo.className;
 						}},
-					{field:'allowed',title:'人数',width:150,align:'center'},
+					{field:'classDate',title:'开课时间',width:100,align:'center'},
+					{field:'teacher',title:'教师',width:150,align:'center',
+						formatter : function(value, row, index) {
+							if(row.user){
+								return row.user.username;
+							}else{
+								return "";
+							}
+						}},
+						{field:'allowed',title:'人数',width:150,align:'center',
+							formatter : function(value, row, index) {
+								return row.pclassInfo.allowed;
+							}},
 					{field:'rest',title:'剩余名额',width:150,align:'center'},				
 					{field:'duration',title:'持续时间',width:100,align:'center'},
 					{field:'selectDate',title:'选课时间',width:100,align:'center'},

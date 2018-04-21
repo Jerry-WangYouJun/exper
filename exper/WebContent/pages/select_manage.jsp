@@ -48,22 +48,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				singleSelect: true,
 				columns:[[
 					{field:'id', hidden:'true',editor:'textbox' },
-					{field:'selectState',title:'课程名称',width:100,align:'center',
-						formatter : function(value, row, index) {
-							if(row.option){
-								if (row.option.states == '1') {
-									return "已选课";
-								} else if (row.option.states == '0') {
-									return "已取消";
-								} else if(row.option.states =='2' ){
-									 return "已提交报告";
-								} else if(row.option.states == "3"){
-									return "教师已评价";
-								}
-							}else{
-								return "";
-							}
-						}},
 					{field:'className',title:'课程名称',width:100,align:'center',
 						formatter : function(value, row, index) {
 							return row.pclassInfo.className;

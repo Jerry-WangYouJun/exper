@@ -57,20 +57,43 @@ public class ExportExcelUtil {
 			}
 			//Cell��ֵ��ʼ
 			cell = row.createCell(0);
-			cell.setCellValue(vo.getClassInfo().getClassName());
+			cell.setCellValue(vo.getClassInfo().getExperName());
 			cell.setCellStyle(cs);
 			
 			cell = row.createCell(1);
-			cell.setCellValue(vo.getClassInfo().getClassDate());
-			cell.setCellStyle(cs);
-			
-			cell = row.createCell(2);
 			cell.setCellValue(vo.getUser().getUsername());
 			cell.setCellStyle(cs);
 			
-			cell = row.createCell(3);
-			cell.setCellValue(vo.getClassInfo().getUser().getUsername());
+			cell = row.createCell(2);
+			cell.setCellValue(vo.getClassInfo().getClassDate());
 			cell.setCellStyle(cs);
+			
+			cell = row.createCell(3);
+			cell.setCellValue(vo.getClassInfo().getDuration());
+			cell.setCellStyle(cs);
+			
+			cell = row.createCell(4);
+			String states = "";
+			switch (vo.getStates()) {
+			case "1":
+				states = "已选课";
+				break;
+			case "0":
+				states = "已取消";
+				break;
+			case "2":
+				states = "已提交报告";
+				break;
+			case "3":
+				states = "已评价";
+				break;
+			default:
+				break;
+			}
+			cell.setCellValue(states);
+			cell.setCellStyle(cs);
+			
+			
 		}
 		return wb;
 	}

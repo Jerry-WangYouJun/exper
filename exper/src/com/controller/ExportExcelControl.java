@@ -73,10 +73,10 @@ public class ExportExcelControl {
 			String realPath=request.getServletContext().getRealPath("");
 			ExportExcelUtil util = new ExportExcelUtil();
 			File file =util.getExcelDemoFile("/课程安排.xlsx" , realPath );
-			String sheetName="付款";  
+			String sheetName="sheet1";  
 			wb = util.writeNewExcel(file, sheetName,results); 
 			
-			String fileName="移动充值卡.xlsx";
+			String fileName="实验课程信息.xlsx";
 		    response.setContentType("application/vnd.ms-excel");
 		    response.setHeader("Content-disposition", "attachment;filename="+ URLEncoder.encode(fileName, "utf-8"));
 		    os = response.getOutputStream();
