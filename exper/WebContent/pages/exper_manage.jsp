@@ -56,7 +56,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					{field:'classDate',title:'开课时间',width:100,align:'center'},
 					{field:'teacherName',title:'教师',width:150,align:'center',
 						formatter : function(value, row, index) {
-							return row.user.username;
+							if(row.user){
+								return row.user.username;
+							}else{
+								return "";
+							}
 						}},
 					{field:'experName',title:'实验名称',width:100,align:'center'},
 					{field:'experInfo',title:'实验资料',width:150,align:'center'},

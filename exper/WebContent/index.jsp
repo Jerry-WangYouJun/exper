@@ -67,7 +67,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			if (Integer.valueOf(session.getAttribute("roleId").toString()) == 1) {
 		%>
 			<li>
-                <a href="javascript:void(0)" onclick="openTab('<%=path%>/pages/class_manage.jsp')">
+                <a href="javascript:void(0)" onclick="openTab('<%=path%>/pages/parent_class_manage.jsp')">
                 			<i class="fa fa-bar-chart-o fa-fw"></i>课程管理
                 	</a>
                 <!-- /.nav-second-level -->
@@ -78,7 +78,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             </li>
             <li>
                 <a href="javascript:void(0)" onclick="openTab('<%=path%>/pages/teacher_manage.jsp')">
-                			<i class="fa fa-bar-chart-o fa-fw"></i>分配实验教师
+                			<i class="fa fa-bar-chart-o fa-fw"></i>实验管理
                 	</a>
                 <!-- /.nav-second-level -->
             </li>

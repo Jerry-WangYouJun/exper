@@ -9,7 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <head>
     <base href="<%=basePath%>">
     
-    <title>指派教师</title>
+    <title>试验管理</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -27,7 +27,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   
   <body class="easyui-layout">
  	<div data-options="region:'north',border:false,showHeader:false"  style="height:40px" >
- 		<p style="font-size: 22px;height:40px;line-height: 40px;margin: 0px">指派教师</p>
+ 		<p style="font-size: 22px;height:40px;line-height: 40px;margin: 0px">实验管理</p>
  	</div>
  	<div data-options="region:'center',border:false,showHeader:false" style="padding-bottom: 3px">
  		<table id="class_table" class="easyui-datagrid" fit="true" ></table>
@@ -35,6 +35,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 	
 	<div id="toolbar_class" style="padding:2px 5px;">
+		 <a onclick="class_add()" class="easyui-linkbutton"  plain="true" iconCls="fa fa-plus fa-fw" style="margin: 2px">新增实验</a> 
         <a onclick="class_edit()" class="easyui-linkbutton"  plain="true" iconCls="fa fa-edit fa-fw" style="margin: 2px">指派教师</a>    
     </div>
 	
@@ -48,15 +49,25 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				singleSelect: true,
 				columns:[[
 					{field:'id', hidden:'true',editor:'textbox' },
-					{field:'className',title:'课程名称',width:100,align:'center'},
-					{field:'classDate',title:'开课时间',width:100,align:'center'},
+					{field:'className',title:'课程名称',width:100,align:'center',
+						formatter : function(value, row, index) {
+							return row.pclassInfo.className;
+						}},
+					{field:'classDate',title:'实验时间',width:100,align:'center'},
 					{field:'teacher',title:'教师',width:150,align:'center',
 						formatter : function(value, row, index) {
-							return row.user.username;
+							if(row.user){
+								return row.user.username;
+							}else{
+								return "";
+							}
 						}},
-					{field:'allowed',title:'人数',width:150,align:'center'},
+					{field:'allowed',title:'人数',width:150,align:'center',
+							formatter : function(value, row, index) {
+								return row.pclassInfo.allowed;
+							}},
 					{field:'rest',title:'剩余名额',width:150,align:'center'},				
-					{field:'duration',title:'持续时间',width:100,align:'center'},
+					{field:'duration',title:'时段',width:100,align:'center'},
 					{field:'selectDate',title:'选课时间',width:100,align:'center'},
 					{field:'experName',title:'实验名称',width:100,align:'center'},
 					{field:'experInfo',title:'实验资料',width:150,align:'center'},
@@ -65,6 +76,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				]],				
 			});
 		});
+    	
+    	function class_add(){
+			$('#class_dlg').dialog('open');	
+			$('#class_dlg').dialog('setTitle','添加信息');
+			$("#class_save").unbind('click').click(function(){
+  				$.ajax({
+  					type: 'post',
+					url : '${pageContext.request.contextPath}/class/class_add',
+					data : $('#class_form').serialize(),
+					dataType : 'json',
+					success : function(obj) {
+						if (obj.success) {
+							alert(obj.msg);
+							class_close();
+						} else {
+							alert(obj.msg);
+						}
+					}
+				});
+			});
+		}
 		function class_edit(){
 			var row = $('#class_table').datagrid('getSelected');
     		if(row){
@@ -135,20 +167,30 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	<form id="class_form" role="form" style="padding: 20px">
     		<div class="form-group col-md-12">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">课程名称：</label>
-                <input name="className" class=" form-control" style="display: inline-block;width: 70%" disabled="disabled">
+                <select id="box" class="easyui-combobox" name="className" style="width:200px;">
+	                  	  <option value="" selected="selected">--请选择--</option>
+						  <c:forEach items="${pclasList}" var ="pcalss">
+						  		  <option value="${pcalss.id }">${pcalss.className}</option>
+						  </c:forEach>
+				</select>
             </div>
             <div class="form-group col-md-12" >
-                     <label  class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">开始时间:</label>
+                     <label  class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">实验时间:</label>
                 		<input class="form-control easyui-datetimebox" id="starttime" name="classDate" style="display: inline-block;width: 70%" />
                   </div>
              <div class="form-group col-md-12">
-            	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">结束时间：</label>
-                <input name="duration" class="form-control easyui-datetimebox"  style="display: inline-block;width: 70%"/>
+            	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">时段：</label>
+                <select id="box" class="easyui-combobox" name="duration" style="width:200px;">
+	                  	  <option value="" selected="selected">--请选择--</option>
+	                  	  <option value="上午" selected="selected">--上午--</option>
+	                  	  <option value="下午" selected="selected">--下午--</option>
+	                  	  <option value="全天" selected="selected">--全天--</option>
+				</select>
             </div>
             <div class="form-group col-md-12">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">教师：</label>
                 <select id="box" class="easyui-combobox" name="teacherId" style="width:200px;">
-	                  	  <option value="">--请选择--</option>
+	                  	  <option value="" selected="selected">--请选择--</option>
 						  <c:forEach items="${teacherList}" var ="teacher">
 						  		  <option value="${teacher.id }">${teacher.username}</option>
 						  </c:forEach>

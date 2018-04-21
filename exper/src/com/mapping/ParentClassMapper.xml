@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mapping.ParentClassMapper" >
+  <resultMap id="BaseResultMap" type="com.pojo.ParentClassInfo" >
+    <id column="ID" property="id" jdbcType="INTEGER" />
+    <result column="className" property="className" jdbcType="VARCHAR" />
+    <result column="startTime" property="startTime" jdbcType="VARCHAR" />
+    <result column="allowed" property="allowed" jdbcType="INTEGER" />
+    <result column="endTime" property="endTime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, className, startTime,  allowed,  endTime 
+    
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_class_parent
+    where ID = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByWhere" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_class_parent
+    where 1=1
+      <if test="className != null and className != ''" >
+        and className like #{className}
+      </if>
+     
+  </select>
+  
+    <select id="selectCountByWhere" resultType="java.lang.Long" parameterType="java.util.HashMap" >
+    select 
+    	count(*) 
+    from  t_class_parent
+    where 1=1
+      <if test="className != null and className != ''" >
+        and className like #{className}
+      </if>
+  </select> 
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_class_parent
+    where ID = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.pojo.ParentClassInfo" >
+    insert into t_class_parent  (className, startTime, allowed,  endTime)
+    values (#{className,jdbcType=VARCHAR}, #{startTime,jdbcType=VARCHAR}, 
+       #{allowed,jdbcType=INTEGER},  #{endTime,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.pojo.ParentClassInfo" >
+    update t_class_parent
+    set 
+      className = #{className,jdbcType=VARCHAR},
+      startTime = #{startTime,jdbcType=VARCHAR},
+      allowed = #{allowed,jdbcType=INTEGER},
+      endTime=#{endTime,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

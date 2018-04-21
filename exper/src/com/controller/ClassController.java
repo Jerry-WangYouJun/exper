@@ -19,8 +19,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.core.model.Grid;
 import com.github.pagehelper.PageHelper;
 import com.pojo.ClassInfo;
+import com.pojo.OptionInfo;
+import com.pojo.ParentClassInfo;
 import com.pojo.User;
 import com.service.ClassServiceImpl;
+import com.service.OptionServiceImpl;
+import com.service.ParentClassServiceImpl;
 import com.service.UserServiceImpl;
 
 @Controller
@@ -29,8 +33,14 @@ public class ClassController {
 	@Resource(name="classServiceImpl")
 	private ClassServiceImpl classService;
 	
+	@Resource(name="parentClassServiceImpl")
+	private ParentClassServiceImpl pclassService;
+	
 	@Resource(name="userServiceImpl")
 	private UserServiceImpl userService;
+	
+	@Resource(name="optionServiceImpl")
+	private OptionServiceImpl optionService;
 	
 	@ResponseBody
 	@RequestMapping("/list")
@@ -45,6 +55,9 @@ public class ClassController {
 		Map params = new HashMap();
 		params.put("className", className);
 		params.put("experName", experName);
+		if(request.getSession().getAttribute("roleId").toString().equals("2")) {
+			teacherId = request.getSession().getAttribute("userId").toString();
+		}
 		params.put("teacherId", teacherId);
 		
 		//mysql分页插件
@@ -58,17 +71,28 @@ public class ClassController {
 				User user =  userService.getUserById(classInfo.getTeacherId());
 				classInfo.setUser(user);
 			}
+			if(!StringUtils.isEmpty(classInfo.getClassName())) {
+				ParentClassInfo pclass =  pclassService.getClassById(Integer.valueOf(classInfo.getClassName()));
+				classInfo.setPclassInfo(pclass);
+			}
+			if(request.getSession().getAttribute("roleId").toString().equals("3")) {
+				params.put("userId", request.getSession().getAttribute("userId").toString());
+				params.put("classId", classInfo.getId());
+				List<OptionInfo> option = optionService.findOptionWhereSql(params);
+				if(option != null && option.size()>0)
+					classInfo.setOption(option.get(0));
+			}
 		}
 		Long total = this.classService.findClassCountByWhere(params);
 		Map param = new HashMap();
 		param.put("role", 2);
 		List<User> teacherList = userService.findUserWhereSql(param);
 		request.getSession().setAttribute("teacherList", teacherList);
+		List<ParentClassInfo> pclasList = pclassService.findClassWhereSql(new HashMap());
+		request.getSession().setAttribute("pclasList", pclasList);
 		grid.setRows(results);
 		grid.setTotal(total);
-		
 		return grid;
-		
 	}
 	
 	@RequestMapping("/class_input")
@@ -81,6 +105,11 @@ public class ClassController {
 	@RequestMapping(value="/class_add",method=RequestMethod.POST)
 	public Map addClass(ClassInfo info){
 		Map<String,Object> result = new HashMap<String,Object>();
+		if(!StringUtils.isEmpty(info.getClassName())) {
+			ParentClassInfo pclass =  pclassService.getClassById(Integer.valueOf(info.getClassName()));
+			info.setPclassInfo(pclass);
+			info.setRest(pclass.getAllowed());
+		}
 		int rows = this.classService.inserClass(info);
 		if (rows > 0) {
 			result.put("success", true);

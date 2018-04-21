@@ -2,6 +2,7 @@ package com.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -54,7 +55,6 @@ public class OptionController {
 		String rows = request.getParameter("rows");
 		String optionName = request.getParameter("optionName");
 		String experName = request.getParameter("experName");
-		String teacherId = request.getParameter("teacherId");
 		
 		Map params = new HashMap();
 		if(request.getSession().getAttribute("roleId").toString().equals("3")) {
@@ -65,15 +65,26 @@ public class OptionController {
 		PageHelper.startPage(Integer.parseInt(page), Integer.parseInt(rows));
 		
 		Grid grid = new Grid();
-		
+		List<OptionInfo> result = new ArrayList<>(); 
 		List<OptionInfo> results = this.optionService.findOptionWhereSql(params);
+		Long total = this.optionService.findCountByWhere(params);
 		for(OptionInfo info : results  ) {
 			  ClassInfo  classInfo =  classService.getClassById(info.getClassId());
 			  info.setClassInfo(classInfo);
 			  User user =  userService.getUserById(info.getUserId());
 			  info.setUser(user);
 		}
-		Long total = this.optionService.findCountByWhere(params);
+		if(request.getSession().getAttribute("roleId").toString().equals("2")) {
+			String teacherId = request.getSession().getAttribute("userId").toString();
+			for(OptionInfo info : results  ) {
+				  if(Integer.valueOf(teacherId).equals(info.getClassInfo().getTeacherId())) {
+					  result.add(info);
+				  }
+			}
+			grid.setRows(result);
+			grid.setTotal(Long.valueOf(result.size()));
+			return grid ;
+		}
 		grid.setRows(results);
 		grid.setTotal(total);
 		return grid;

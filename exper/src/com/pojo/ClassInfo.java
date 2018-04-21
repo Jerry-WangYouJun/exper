@@ -15,6 +15,8 @@ public class ClassInfo {
 	  private String remark;
 	  
 	  private User  user;
+	  private ParentClassInfo  pclassInfo;
+	  private OptionInfo option ;
 	public Integer getId() {
 		return id;
 	}
@@ -92,5 +94,17 @@ public class ClassInfo {
 	}
 	public void setUser(User user) {
 		this.user = user;
+	}
+	public ParentClassInfo getPclassInfo() {
+		return pclassInfo;
+	}
+	public void setPclassInfo(ParentClassInfo pclassInfo) {
+		this.pclassInfo = pclassInfo;
+	}
+	public OptionInfo getOption() {
+		return option;
+	}
+	public void setOption(OptionInfo option) {
+		this.option = option;
 	}
 }

@@ -58,11 +58,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					{field:'id', hidden:'true',editor:'textbox' },
 					{field:'userInfo',title:'学生',width:100,align:'center',
 						formatter : function(value, row, index) {
-							return row.user.username;
+							if(row.user){
+								 return row.user.username;
+							}else{
+								return "";
+							}
 						}},
-					{field:'classInfo',title:'课程名',width:100,align:'center',
+					{field:'classInfo',title:'实验名',width:100,align:'center',
 						formatter : function(value, row, index) {
-							return row.classInfo.className;
+							return row.classInfo.experName;
 						}},
 					{field:'states',title:'实验状态',width:100,align:'center',
 						formatter : function(value, row, index) {

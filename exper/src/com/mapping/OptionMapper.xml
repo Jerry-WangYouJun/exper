@@ -31,6 +31,9 @@
        <if test="userId != null and userId != ''" >
         and userId =  #{userId}
       </if>
+        <if test="classId != null and classId != ''" >
+        and classId =  #{classId}
+      </if>
       <if test="states != null and states != ''" >
         and states like #{states}
       </if>
