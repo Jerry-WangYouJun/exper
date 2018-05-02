@@ -71,28 +71,33 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		function class_select(){
 			var row = $('#class_table').datagrid('getSelected');
     		if(row){
-    			$.messager.confirm(
-    				'提示',
-    				'确定要选这门课?',
-    				function(r) {
-    					if (r) {
-    						$.ajax({ 
-    							type:'post',
-    			    			url: '${pageContext.request.contextPath}/option/option_select',
-    			    			data : {"id":row.id},
-    			    			dataType : 'json',
-    			    			success : function(obj){
-    			    				if(obj.success){
-    			    				 	alert(obj.msg);
-    			    				 	$('#class_table').datagrid('reload');
-    			    				}else{
-    			    					alert(obj.msg);
-    			    					$('#class_table').datagrid('reload');
-    			    				}
-    			    			}
-    			    		});
-    					}
-    				});  		
+    			$('#class_dlg').dialog('open');	
+    			$('#class_dlg').dialog('setTitle','添加信息');
+    			$("#class_save").unbind('click').click(function(){
+    				$.messager.confirm(
+    	    				'提示',
+    	    				'确定要选这门课?',
+    	    				function(r) {
+    	    					if (r) {
+    	    						$.ajax({ 
+    	    							type:'post',
+    	    			    			url: '${pageContext.request.contextPath}/option/option_select',
+    	    			    			data : {"id":row.id , "timeZone":$("#timeZone").val()},
+    	    			    			dataType : 'json',
+    	    			    			success : function(obj){
+    	    			    				if(obj.success){
+    	    			    				 	alert(obj.msg);
+    	    			    				 	class_close();
+    	    			    				 	$('#class_table').datagrid('reload');
+    	    			    				}else{
+    	    			    					alert(obj.msg);
+    	    			    					$('#class_table').datagrid('reload');
+    	    			    				}
+    	    			    			}
+    	    			    		});
+    	    					}
+    	    				}); 
+    			});
     			}
 		}
 		function class_close(){
@@ -112,41 +117,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<div  id="class_dlg" closed="true" class="easyui-dialog" style="width:400px;height: 450px"
 	data-options="border:'thin',cls:'c1',collapsible:false,modal:true,closable:false,top:10,buttons: '#class_dlg_buttons'">
     	<form id="class_form" role="form" style="padding: 20px">
-    		<div class="form-group col-md-12">
-            	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">课程名称：</label>
-                <input name="className" class=" form-control" style="display: inline-block;width: 70%">
-            </div>
             <div class="form-group col-md-12">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">教师：</label>
-                <select name="teacherId" id="teacherId" 
+                <select name="timeZone" id="timeZone" 
                     		class="form-control select2 easyui-combobox" style="width: 70%;height: 86%" editable="false">
-                	<option value="2">供货商</option>
-                	<option value="3">客户</option>
+                	<option value="1">第一节</option>
+                	<option value="2">第二节</option>
+                <option value="3">第三节</option>
+                	<option value="4">第四节</option>
                 </select>
-            </div>
-            <div class="form-group col-md-12">
-            	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">开课时间：</label>
-                <input name="classDate" class=" form-control" style="display: inline-block;width: 70%">
-            </div>
-            <div class="form-group col-md-12">
-            	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">课程人数：</label>
-                <input name="allowed" class=" form-control" style="display: inline-block;width: 70%">
-            </div>
-            <div class="form-group col-md-12">
-            	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">剩余名额：</label>
-                <input name="rest" class=" form-control" style="display: inline-block;width: 70%">
-            </div>
-            <div class="form-group col-md-12">
-            	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">持续时间：</label>
-                <textarea name="duration" class=" form-control" rows="2" style="display: inline-block;width: 70%"></textarea>
-            </div>
-            <div class="form-group col-md-12">
-            	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">选课时段：</label>
-                <input name="selectDate" class=" form-control" style="display: inline-block;width: 70%">
-            </div>
-            <div class="form-group col-md-12">
-            	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">备注：</label>
-                <textarea name="remark" class=" form-control" rows="4" style="display: inline-block;width: 70%"></textarea>
             </div>
             <input id="id" name="id" style="display:none;"/> 
     	</form>                 

@@ -23,10 +23,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     
    <jsp:include page="/common.jsp"></jsp:include>
    <script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery.form.js"></script>
+  <script type="text/javascript">
+  	 function queryList(){
+  		 var className = $("#className").val();
+  		$("#class_table").datagrid("load",{ 'className':className});
+  		//window.location.href =  '${pageContext.request.contextPath}/excel/export?className='+className;
+  	 }
+  </script>
   </head>
   
   <body class="easyui-layout">
- 	<div data-options="region:'north',border:false,showHeader:false"  style="height:40px" >
+ 	<div data-options="region:'north',border:false,showHeader:false"  style="height:100px" >
  		<p style="font-size: 22px;height:40px;line-height: 40px;margin: 0px">课程管理</p>
  	</div>
  	<div data-options="region:'center',border:false,showHeader:false" style="padding-bottom: 3px">
@@ -106,7 +113,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		}
 		
 		function  class_export(){
-			window.location.href =  '${pageContext.request.contextPath}/excel/export';
+			 var className = $("#className").val();
+			window.location.href =  '${pageContext.request.contextPath}/excel/export?className='+className;
 		}
 		function class_edit(){
 			var row = $('#class_table').datagrid('getSelected');

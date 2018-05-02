@@ -29,9 +29,11 @@ import com.core.model.Grid;
 import com.github.pagehelper.PageHelper;
 import com.pojo.ClassInfo;
 import com.pojo.OptionInfo;
+import com.pojo.ParentClassInfo;
 import com.pojo.User;
 import com.service.ClassServiceImpl;
 import com.service.OptionServiceImpl;
+import com.service.ParentClassServiceImpl;
 import com.service.UserServiceImpl;
 
 @Controller
@@ -47,6 +49,9 @@ public class OptionController {
 	@Resource(name="userServiceImpl")
 	private UserServiceImpl userService;
 	
+	@Resource(name="parentClassServiceImpl")
+	private ParentClassServiceImpl pclassService;
+	
 	@ResponseBody
 	@RequestMapping("/list")
 	public Grid queryList(HttpServletRequest request,Model model){
@@ -54,13 +59,15 @@ public class OptionController {
 		String page = request.getParameter("page");
 		String rows = request.getParameter("rows");
 		String optionName = request.getParameter("optionName");
-		String experName = request.getParameter("experName");
+		String className = request.getParameter("className");
 		
 		Map params = new HashMap();
 		if(request.getSession().getAttribute("roleId").toString().equals("3")) {
 			params.put("userId", request.getSession().getAttribute("userId").toString());
 		}
-		
+		if(className!=null) {
+			params.put("className", className);
+		}
 		//mysql分页插件
 		PageHelper.startPage(Integer.parseInt(page), Integer.parseInt(rows));
 		
@@ -71,6 +78,8 @@ public class OptionController {
 		for(OptionInfo info : results  ) {
 			  ClassInfo  classInfo =  classService.getClassById(info.getClassId());
 			  info.setClassInfo(classInfo);
+			  ParentClassInfo  pclass = pclassService.getClassById(Integer.valueOf(classInfo.getClassName()));
+			  classInfo.setPclassInfo(pclass);
 			  User user =  userService.getUserById(info.getUserId());
 			  info.setUser(user);
 		}
@@ -135,12 +144,22 @@ public class OptionController {
 	}
 	@ResponseBody
 	@RequestMapping(value="/option_select",method=RequestMethod.POST)
-	public Map selectOption( @RequestParam("id")Integer id , HttpServletRequest request){
+	public Map selectOption( @RequestParam("id")Integer id , String timeZone, HttpServletRequest request){
 		Map map = new HashMap();
 		OptionInfo  info = new OptionInfo();
 		info.setClassId(id);
 		info.setUserId(Integer.valueOf(request.getSession().getAttribute("userId").toString()));
 		info.setStates("1");
+		Map params = new HashMap();
+		params.put("classId", id);
+		params.put("userId", Integer.valueOf(request.getSession().getAttribute("userId").toString()));
+		List<OptionInfo> list = optionService.findOptionWhereSql(params);
+		if(list.size() > 0) {
+			map.put("success", false);
+			map.put("msg", "你已经选过该课程了，请重新选课！");
+			return map ;
+		}
+		info.setTimeZone(timeZone);
 		int rows = this.optionService.insert(info);
 		if (rows > 0) {
 			
@@ -149,7 +168,7 @@ public class OptionController {
 			map.put("msg", "选课成功！");
 		}else{
 			map.put("success", false);
-			map.put("msg", "删除失败！");
+			map.put("msg", "选课失败！");
 		}
 		return map;
 	}

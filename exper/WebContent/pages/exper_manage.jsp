@@ -37,7 +37,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<div id="toolbar_class" style="padding:2px 5px;">
 		<c:choose>
 			  <c:when test="${roleId  eq '2' }">
-			        <a onclick="class_exper()" class="easyui-linkbutton"  plain="true" iconCls="fa fa-book fa-fw" style="margin: 2px">新增实验信息</a>
+			        <a onclick="class_exper()" class="easyui-linkbutton"  plain="true" iconCls="fa fa-book fa-fw" style="margin: 2px">提交实验信息</a>
 			  </c:when>
 		</c:choose>
     </div>
@@ -63,7 +63,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							}
 						}},
 					{field:'experName',title:'实验名称',width:100,align:'center'},
-					{field:'experInfo',title:'实验资料',width:150,align:'center'},
+					{field:'experInfo',title:'实验资料',width:150,align:'center',
+						formatter : function(value, row, index) {
+							   return  "<a href='${pageContext.request.contextPath}/excel/testHttpMessageDown?fileName=" +row.experInfo + "'>" + row.experInfo+"</a>";
+							}
+						},
 					{field:'experData',title:'实验数据',width:150,align:'center'},
 					{field:'remark',title:'备注',width:100,align:'center'}
 				]],				
@@ -77,7 +81,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     			$('#class_dlg').dialog('setTitle','编辑信息');
     			$('#class_form').form('load', row);
 				$("#class_save").unbind('click').click(function(){
-  					$.ajax({
+					var upfile = $("#upfile").val();
+					if(upfile ==''){
+						  alert("请选择要上传的实验图片");
+						  return false;
+					}
+					$("#class_form").ajaxSubmit({
   						type:'post',
 						url : '${pageContext.request.contextPath}/class/class_exper',
 						data : $('#class_form').serialize(),
@@ -130,7 +139,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                   </div>
             <div class="form-group col-md-12">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">参考资料：</label>
-                <textarea name="experInfo" class=" form-control" rows="4" style="display: inline-block;width: 70%"></textarea>
+	                <input type="file" id="upfile" name="upfile" class=" form-control" style="display: inline-block;width: 70%">
             </div>
             <div class="form-group col-md-12">
             	<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">实验数据：</label>

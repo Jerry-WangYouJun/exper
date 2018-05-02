@@ -70,8 +70,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						}},
 					{field:'experTime',title:'实验时间',width:100,align:'center',
 							formatter : function(value, row, index) {
-								return row.classInfo.classDate;
+								return row.classInfo.timeZone;
 							}},
+					{field:'timeZone',title:'实验时段',width:100,align:'center',
+								formatter : function(value, row, index) {
+									if (value == '1') {
+										return "第一节";
+									} else if (value == '2') {
+										return "第二节";
+									} else if(value =='3' ){
+										 return "第三节";
+									} else if(value == "4"){
+										return "第五节";
+									}
+								}},
 					{field:'states',title:'实验状态',width:100,align:'center',
 						formatter : function(value, row, index) {
 							if (value == '1') {
@@ -88,7 +100,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					{field:'situation',title:'学生试验情况',width:150,align:'center'},
 					{field:'imageName',title:'实验图片',width:150,align:'center',formatter:function(value,row,index){
 						if(value){
-							 return '<img style="width:100px;length:100px" border="1" src="${pageContext.request.contextPath}/uploadFile/' + value +'"/>'; 
+							 return  "<a href='${pageContext.request.contextPath}/excel/testHttpMessageDown?fileName=" +value + "'>" + value+"</a>"; 
 						}else{
 							return "";
 						}

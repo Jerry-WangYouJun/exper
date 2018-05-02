@@ -9,6 +9,7 @@ public class OptionInfo {
 	 private String situation;
 	 private String imageName;
 	 private String imageUrl;
+	 private String timeZone;
 	 private String remark;
 	 
 	 private ClassInfo classInfo;
@@ -79,6 +80,12 @@ public class OptionInfo {
 	}
 	public void setUser(User user) {
 		this.user = user;
+	}
+	public String getTimeZone() {
+		return timeZone;
+	}
+	public void setTimeZone(String timeZone) {
+		this.timeZone = timeZone;
 	}
 	
 }

@@ -10,10 +10,11 @@
     <result column="situation" property="situation" jdbcType="VARCHAR" />
     <result column="imageName" property="imageName" jdbcType="VARCHAR" />
     <result column="imageUrl" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="timeZone" property="timeZone" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    ID, states, judge, userId, situation, imageName ,imageUrl, remark , classId
+    ID, states, judge, userId, situation, imageName ,imageUrl, remark , classId,timeZone
     
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
@@ -37,6 +38,9 @@
       <if test="states != null and states != ''" >
         and states like #{states}
       </if>
+      <if test="className != null and className != ''" >
+        and userId in (select id from t_user where position like CONCAT('%','${className}','%'))
+      </if>
      
   </select>
   
@@ -51,6 +55,9 @@
       <if test="states != null and states != ''" >
         and states like #{states}
       </if>
+      <if test="className != null and className != ''" >
+        and userId in (select id from t_user where position like CONCAT('%','${className}','%'))
+      </if>
   </select> 
   
   
@@ -59,10 +66,11 @@
     where ID = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.pojo.OptionInfo" >
-    insert into t_optional  (states, judge,  userId, situation, imageUrl, remark,classId)
+    insert into t_optional  (states, judge,  userId, situation, imageUrl, remark,classId,timeZone)
     values (#{states,jdbcType=VARCHAR}, #{judge,jdbcType=VARCHAR}, 
         #{userId,jdbcType=INTEGER}, #{situation,jdbcType=VARCHAR},
-         #{imageUrl,jdbcType=VARCHAR},  #{remark,jdbcType=VARCHAR},#{classId,jdbcType=INTEGER} )
+         #{imageUrl,jdbcType=VARCHAR},  #{remark,jdbcType=VARCHAR},#{classId,jdbcType=INTEGER} 
+         ,#{timeZone,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.pojo.OptionInfo" >
     update t_optional
@@ -73,7 +81,8 @@
       situation = #{situation,jdbcType=VARCHAR},
       imageName=#{imageName,jdbcType=VARCHAR},
       imageUrl = #{imageUrl,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR}
+      remark = #{remark,jdbcType=VARCHAR},
+      timeZone=#{timeZone.jdbcType=VARHCAR}
     where ID = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

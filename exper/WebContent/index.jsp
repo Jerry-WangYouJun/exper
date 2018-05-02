@@ -73,7 +73,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 <!-- /.nav-second-level -->
             </li>
             <li>
-                <a href="javascript:void(0)'  class="active" onclick="openTab('<%=path%>/pages/user_manage.jsp')">
+                <a href="javascript:void(0)"  onclick="openTab('<%=path%>/pages/user_manage.jsp')">
                   <i class="fa fa-dashboard fa-fw"></i>用户管理</a>
             </li>
             <li>
@@ -86,15 +86,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			}else if (Integer.valueOf(session.getAttribute("roleId").toString()) == 2) {
 		%>
 			<li>
-                <a href="javascript:void(0)'  class="active" onclick="openTab('<%=path%>/pages/exper_manage.jsp')">
+                <a href="javascript:void(0)"  class="active" onclick="openTab('<%=path%>/pages/exper_manage.jsp')">
                   <i class="fa fa-dashboard fa-fw"></i>提交实验数据</a>
             </li>
 			<li>
-                <a href="javascript:void(0)'  class="active" onclick="openTab('<%=path%>/pages/option_manage.jsp')">
+                <a href="javascript:void(0)"  class="active" onclick="openTab('<%=path%>/pages/option_manage.jsp')">
                   <i class="fa fa-dashboard fa-fw"></i>实验报告评价</a>
             </li>
             <li>
-                <a href="javascript:void(0)" class="active" onclick="openTab('${pageContext.request.contextPath}/pages/class_manage.jsp')">
+                <a href="javascript:void(0)" class="active" onclick="openTab('${pageContext.request.contextPath}/pages/uploadInfo.jsp')">
                 <i class="fa fa-bar-chart-o fa-fw"></i>导出实验报告</a>
                 <!-- /.nav-second-level -->
             </li>

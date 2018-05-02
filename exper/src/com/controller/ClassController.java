@@ -1,11 +1,14 @@
 package com.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSONObject;
+import com.common.CodeUtil;
 import com.core.model.Grid;
 import com.github.pagehelper.PageHelper;
 import com.pojo.ClassInfo;
@@ -55,8 +61,10 @@ public class ClassController {
 		Map params = new HashMap();
 		params.put("className", className);
 		params.put("experName", experName);
-		if(request.getSession().getAttribute("roleId").toString().equals("2")) {
-			teacherId = request.getSession().getAttribute("userId").toString();
+		if(request.getSession().getAttribute("roleId") != null) {
+			if("2".equals(request.getSession().getAttribute("roleId").toString())) {
+				teacherId = request.getSession().getAttribute("userId").toString();
+			}
 		}
 		params.put("teacherId", teacherId);
 		
@@ -75,7 +83,8 @@ public class ClassController {
 				ParentClassInfo pclass =  pclassService.getClassById(Integer.valueOf(classInfo.getClassName()));
 				classInfo.setPclassInfo(pclass);
 			}
-			if(request.getSession().getAttribute("roleId").toString().equals("3")) {
+			if(request.getSession().getAttribute("roleId")!=null 
+					&& request.getSession().getAttribute("roleId").toString().equals("3")) {
 				params.put("userId", request.getSession().getAttribute("userId").toString());
 				params.put("classId", classInfo.getId());
 				List<OptionInfo> option = optionService.findOptionWhereSql(params);
@@ -148,16 +157,54 @@ public class ClassController {
 		return result;
 	}
 	
+	@RequestMapping("/option_situation")
+	public void  instSituation(OptionInfo info ,  HttpServletRequest request , HttpServletResponse response 
+			,@RequestParam("upfile") MultipartFile[] files) {
+		PrintWriter out;
+		try {
+			OptionInfo infoTemp = optionService.getOptionById(info.getId());
+			infoTemp.setSituation(info.getSituation());
+			for(MultipartFile file:files){
+				infoTemp.setImageName(file.getOriginalFilename());
+				String realPath=request.getServletContext().getRealPath("/uploadFile");
+				CodeUtil.SaveFileFromInputStream(file , realPath);
+			}
+			infoTemp.setStates("2");
+			optionService.update(infoTemp);
+			response.setContentType("text/html;charset=UTF-8");
+			out = response.getWriter();
+			JSONObject json = new JSONObject();
+			json.put("success", true);
+			json.put("msg", "操作成功");
+			out.println(json);
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@ResponseBody   //转成JSON字符串
 	@RequestMapping(value="/class_exper",method=RequestMethod.POST)
-	public Map updateExper(ClassInfo info){
+	public Map updateExper(ClassInfo info ,  HttpServletRequest request 
+			, HttpServletResponse response,@RequestParam("upfile") MultipartFile[] files){
 		ClassInfo  classInfo = classService.getClassById(info.getId());
 		Map<String,Object> result = new HashMap<String,Object>();
 		classInfo.setExperData(info.getExperData());
 		classInfo.setExperInfo(info.getExperInfo());
 		classInfo.setExperName(info.getExperName());
-		classInfo.setRemark(StringUtils.isEmpty(info.getRemark()) ?  "" : (info.getRemark()+";")
-		+ (StringUtils.isEmpty(classInfo.getRemark())?"":classInfo.getRemark()));
+		classInfo.setRemark(info.getRemark());
+		try {
+			for(MultipartFile file:files){
+				classInfo.setExperInfo(file.getOriginalFilename());
+				String realPath=request.getServletContext().getRealPath("/uploadFile");
+					CodeUtil.SaveFileFromInputStream(file , realPath);
+			}
+		} catch (IOException e) {
+			result.put("success", false);
+			result.put("msg", e.getMessage());
+			return result;
+		}
 		int rows = this.classService.updateClass(classInfo);
 		if (rows > 0) {
 			result.put("success", true);

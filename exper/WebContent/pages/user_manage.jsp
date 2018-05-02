@@ -3,7 +3,6 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
@@ -151,6 +150,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			$('#user_dlg').dialog('close');	
 			$('#user_table').datagrid('reload');
 		}
+		
+		$(function(){
+			$("#box").combobox({  
+			       onChange: function () {  
+			           var newPtion = $("#box").combobox('getText')  
+			           if (newPtion == "学生") {  
+			                $("#className").text("班级：");
+			                $("#className").after('<input name="position" id="position"  style="display: inline-block;width: 70%">');
+			                
+			           }else{
+			        	   	    $("#className").text("");
+			        	   	 $("#position").remove();
+			           }  
+			       }  
+			   })  
+		});
     </script>
     
     <div id="user_dlg_buttons" style="width:800px;height: 40px;text-align: center">
@@ -164,7 +179,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     	<form id="user_form" role="form" style="padding: 20px">
     			<div class="form-group col-md-12">
             		<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">用户名：</label>
-                <input name="username" type="text" style="display: inline-block;width: 70%">
+                <input name="username" id="username" type="text" style="display: inline-block;width: 70%">
             </div>
             <div class="form-group col-md-12">
             <label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">角色：</label>
@@ -178,7 +193,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             		<label class="col-md-4" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%">密码：</label>
                 <input name="pwd" type="password" style="display: inline-block;width: 70%">
             </div>
-            <input id="id" name="id" style="display:none;"/> 
+            <div class="form-group col-md-12">
+            		<label class="col-md-4" id="className" style="display: inline-block;height: 34px;line-height: 34px;text-align: left;width: 30%"></label>
+            </div>
+            <input id="id" name="id" style="display:none;" /> 
     	</form>                 
     </div>
 </body>

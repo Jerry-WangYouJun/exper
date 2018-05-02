@@ -29,10 +29,20 @@ public class CodeUtil {
 			return file;
 		}
 		
+		//tomcat配置 - <Context docBase="D:/nwfile/img" path="/img" />
 	    public static void SaveFileFromInputStream(MultipartFile pic , String realPath ) throws IOException
 	    {      
+	    	String osName =  System.getProperty("os.name");
+        	String path =  System.getProperty("user.dir")  ;
+        	if(osName.toUpperCase().startsWith("MAC")) {
+//        		int  splitIndex = System.getProperty("user.dir").lastIndexOf(System.getProperty("file.separator"));
+//        		path = System.getProperty("user.dir").substring(0, splitIndex);
+        		path="/Users/wangyoujun/Desktop/smd/WebContent/image";
+        	}else{
+        		path="D:\\uploadFile";
+        	}
         	InputStream stream = pic.getInputStream();
-	        FileOutputStream fs=new FileOutputStream( realPath + "/"+ pic.getOriginalFilename());
+	        FileOutputStream fs=new FileOutputStream( path + "/"+ pic.getOriginalFilename());
 	        byte[] buffer =new byte[1024*1024];
 	        int bytesum = 0;
 	        int byteread = 0; 
