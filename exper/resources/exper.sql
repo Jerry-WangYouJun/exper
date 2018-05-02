@@ -11,7 +11,7 @@
  Target Server Version : 50719
  File Encoding         : utf-8
 
- Date: 04/21/2018 09:48:03 AM
+ Date: 05/02/2018 14:35:28 PM
 */
 
 SET NAMES utf8;
@@ -35,7 +35,14 @@ CREATE TABLE `t_class` (
   `experData` varchar(200) DEFAULT NULL COMMENT '实验数据',
   `remark` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Records of `t_class`
+-- ----------------------------
+BEGIN;
+INSERT INTO `t_class` VALUES ('1', '1', '2018-04-30 12:52:41', '3', null, '98', '全天', null, '', '-    (4).doc', '', ''), ('2', '1', '2018-05-02 10:23:45', '3', null, '99', '全天', null, '11111', '简历-王友君.doc', '11111', ''), ('3', '1', '2018-05-03 22:34:27', '3', null, '98', '全天', null, null, null, null, null);
+COMMIT;
 
 -- ----------------------------
 --  Table structure for `t_class_parent`
@@ -48,7 +55,14 @@ CREATE TABLE `t_class_parent` (
   `endTime` varchar(20) DEFAULT NULL,
   `allowed` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Records of `t_class_parent`
+-- ----------------------------
+BEGIN;
+INSERT INTO `t_class_parent` VALUES ('1', '测试课程1', '2018-04-22 12:43:54', '2018-05-05 12:44:00', '100');
+COMMIT;
 
 -- ----------------------------
 --  Table structure for `t_exper`
@@ -76,9 +90,17 @@ CREATE TABLE `t_optional` (
   `situation` varchar(200) DEFAULT NULL COMMENT '学生试验情况',
   `imageName` varchar(50) DEFAULT NULL COMMENT '提交图片名',
   `imageUrl` varchar(200) DEFAULT NULL COMMENT '提交地址',
+  `timeZone` varchar(10) DEFAULT NULL,
   `remark` varchar(200) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Records of `t_optional`
+-- ----------------------------
+BEGIN;
+INSERT INTO `t_optional` VALUES ('1', '2', '1', '2', null, '', '301518842718_.pic_thumb.jpg', null, null, null), ('2', '5', '1', '1', null, null, null, null, null, null), ('3', '2', '2', '1', null, null, null, null, null, null), ('4', '1', '3', '1', null, null, null, null, '2', null), ('5', '2', '3', '1', null, null, null, null, '1', null);
+COMMIT;
 
 -- ----------------------------
 --  Table structure for `t_user`
@@ -95,6 +117,13 @@ CREATE TABLE `t_user` (
   `telphone` varchar(15) DEFAULT NULL,
   `remark` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Records of `t_user`
+-- ----------------------------
+BEGIN;
+INSERT INTO `t_user` VALUES ('1', '1', 'admin', '123456', null, null, null, null, null), ('2', '3', 'stu', '123', null, null, null, null, null), ('3', '2', 't', '123', null, null, null, null, null), ('5', '3', 'stu2', '123', null, '一班', null, null, null);
+COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
