@@ -39,7 +39,7 @@ public class UserController {
 		RequestDispatcher rd = null;
 		if (user == null) {
 			request.setAttribute("msg", "用户名或者密码错误!");
-			rd = request.getRequestDispatcher("/login.jsp");
+			rd = request.getRequestDispatcher("/main.jsp");
 			
 		}else{
 			request.getSession().setAttribute("userId", user.getId());

@@ -104,7 +104,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						}else{
 							return "";
 						}
-					}},				
+					}},
+					{field:'experInfo',title:'实验资料',width:150,align:'center',formatter:function(value,row,index){
+						if(row.classInfo){
+							 return  "<a href='${pageContext.request.contextPath}/excel/testHttpMessageDown?fileName=" +row.classInfo.experInfo + "'>" + row.classInfo.experInfo+"</a>"; 
+						}else{
+							return "";
+						}
+					}},			
 					{field:'remark',title:'备注',width:100,align:'center'}
 				]],				
 			});

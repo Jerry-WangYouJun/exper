@@ -136,7 +136,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     			success : function(obj){
     				if(obj.success){
     					alert(obj.msg);
-						location.replace('<%=path%>' + '/login.jsp');
+						location.replace('<%=path%>' + '/main.jsp');
 					}else{
 						alert(obj.msg);
 					}
